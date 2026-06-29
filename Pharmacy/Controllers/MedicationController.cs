@@ -1,5 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Pharmacy.Database;
 
 namespace Pharmacy.Controllers;
 
@@ -7,5 +8,22 @@ namespace Pharmacy.Controllers;
 [Route("[controller]")]
 public class MedicationController : ControllerBase
 {
+    [HttpGet]
+    public ActionResult<IEnumerable<Medication>> Get()
+    {
+        return Ok(MedicationData.Medications);
+    }
 
+    [HttpGet("{id:int}")]
+    public ActionResult<Medication> GetById(int id)
+    {
+        var medication = MedicationData.Medications.FirstOrDefault(m => m.Id == id);
+
+        if (medication is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(medication);
+    }
 }
